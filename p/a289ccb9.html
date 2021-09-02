@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>凤凰架构-架构演进 | 七路灯</title>
+  <meta name="description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 架构演进，原始分布式时代-&gt;单体系统时代-&gt;SOA时代-&gt;微服务时代-&gt;后微服务时代-&gt;无服务时代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凤凰架构-架构演进">
+<meta property="og:url" content="http://www.lights8080.com/p/a289ccb9.html">
+<meta property="og:site_name" content="七路灯">
+<meta property="og:description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 架构演进，原始分布式时代-&gt;单体系统时代-&gt;SOA时代-&gt;微服务时代-&gt;后微服务时代-&gt;无服务时代">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/bb/d6/bb53ddc9eec69bd1cd175aa50d64d7d6.jpg">
+<meta property="article:published_time" content="2021-07-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-03T01:47:54.000Z">
+<meta property="article:author" content="七路灯">
+<meta property="article:tag" content="凤凰架构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/bb/d6/bb53ddc9eec69bd1cd175aa50d64d7d6.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.lights8080.com/p/a289ccb9.html">
+  
+    <link rel="alternate" href="/atom.xml" title="七路灯" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://www.lights8080.com" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">七路灯</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">从事互联网开发，信奉终身成长的技术人</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎关注公众号共同交流学习!</p>
+            </div>
+            <div class="content">
+                <img src="/../images/gongzhonghao-qrcode.jpg" alt="site.qrcode_alt" title="site.qrcode_title" />
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">9</span></li></ul></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.5px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.83px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.17px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.67px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.17px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.17px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.17px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.17px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.5px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.33px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.83px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.17px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.17px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 13px;">架构</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.5px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.5px;">语录</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/7fc5d86f.html" class="title">2108-4-企业文化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-26T16:00:00.000Z" itemprop="datePublished">2021-08-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/418eb76d.html" class="title">2108-3-从NBA看职场</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-19T16:00:00.000Z" itemprop="datePublished">2021-08-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/197f72b3.html" class="title">2108-2-K12双减的深度思考</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-12T16:00:00.000Z" itemprop="datePublished">2021-08-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/fd2df2c4.html" class="title">凤凰架构-透明多层分流系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-08T16:00:00.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/f438d8cc.html" class="title">2108-1-什么才是给孩子最好的礼物</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-05T16:00:00.000Z" itemprop="datePublished">2021-08-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-读书笔记/凤凰架构/凤凰架构-架构演进" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      凤凰架构-架构演进
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/p/a289ccb9.html" class="article-date">
+	  <time datetime="2021-07-22T16:00:00.000Z" itemprop="datePublished">2021-07-23</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a>►<a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/p/a289ccb9.html" class="leancloud_visitors"  data-flag-title="凤凰架构-架构演进">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/p/a289ccb9.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>周志明《凤凰架构：构建可靠的大型分布式系统》<br><a target="_blank" rel="noopener" href="https://icyfenix.cn/">https://icyfenix.cn/</a></p>
+<p>架构演进，原始分布式时代-&gt;单体系统时代-&gt;SOA时代-&gt;微服务时代-&gt;后微服务时代-&gt;无服务时代</p>
+<span id="more"></span>
+
+<p>架构并不是被“发明”出来的，而是持续进化的结果。</p>
+<p>整个“演进中的架构”这部分，一条重要的逻辑线索就是软件工业对如何拆分业务、隔离技术复杂性的探索。从最初的不拆分，到通过越来越复杂的技术手段逐渐满足了业务的拆分与协作，再到追求隔离掉这些复杂技术手段，将它们掩埋于基础设施之中，到未来（有可能的）重新回到无需考虑算力、无需拆分的云端系统。</p>
+<h2 id="原始分布式时代"><a href="#原始分布式时代" class="headerlink" title="原始分布式时代"></a>原始分布式时代</h2><blockquote>
+<p>Unix的分布式设计哲学：<br>保持接口与实现的简单性，比系统的任何其他属性，包括准确性、一致性和完整性，都来得更加重要。</p>
+</blockquote>
+<p>20世纪70年代末期到80年代初，计算机科学刚经历了从以大型机为主向以微型机为主的蜕变。当时计算机硬件局促的运算处理能力，已直接妨碍到了在单台计算机上信息系统软件能够达到的最大规模。为突破硬件算力的限制，各个高校、研究机构、软硬件厂商开始分头探索，寻找使用多台计算机共同协作来支撑同一套软件系统运行的可行方案。</p>
+<p>当时研究这些技术都带着浓厚的UNIX设计风格，有一个预设的重要原则是使分布式环境中的服务调用、资源访问、数据存储等操作尽可能透明化、简单化，使开发人员不必过于关注他们访问的方法或其他资源是位于本地还是远程。</p>
+<p>但是“调用远程方法”与“调用本地方法”两者的复杂度就完全不可同日而语，一旦要考虑性能上的差异，那远程和本地的鸿沟是无比深刻的，两者的速度往往有着数量级上的差距，完全不可调和。</p>
+<p>在那个时代的机器硬件条件下，为了让程序在运行效率上可被用户接受，开发者在某些场景只能被迫将几个原本毫无关系的方法打包到一个方法体内，一块进行远程调用，以提升性能。这本身与期望的分布式相矛盾，另外开发者需要时刻注意是在编写分布式程序。最终导致设计向性能做出的妥协，本地与远程无论是编码、设计、部署还是运行效率角度上看，都有着天壤之别。</p>
+<blockquote>
+<p>原始分布式时代的教训：<br>某个功能能够进行分布式，并不意味着它就应该进行分布式，强行追求透明的分布式操作，只会自寻苦果。</p>
+</blockquote>
+<p>以上结论是有违UNIX设计哲学的，却是当时现实情况下不得不做出的让步。摆在计算机科学面前有两条通往更大规模软件系统的道路，一条是尽快提升单机的处理能力，以避免分布式带来的种种问题；另一条路是找到更完美的解决如何构筑分布式系统的解决方案。</p>
+<p>20世纪80年代正是摩尔定律开始稳定发挥作用的黄金时期，硬件算力束缚软件规模的链条很快变得松动，信息系统进入了以单台或少量几台计算机即可作为服务器来支撑大型信息系统运作的单体时代，且在很长的一段时间内，单体都将是软件架构的绝对主流。</p>
+<h2 id="单体系统时代"><a href="#单体系统时代" class="headerlink" title="单体系统时代"></a>单体系统时代</h2><blockquote>
+<p>单体意味着自包含。单体应用描述了一种由同一技术平台的不同组件构成的单层软件。</p>
+</blockquote>
+<p>单体架构是出现时间最早、应用范围最广、使用人数最多、统治历史最长的一种架构风格。但“单体”这个名称，却是从微服务开始流行之后，才“事后追认”所形成的概念。在这之前，并没有多少人会把“单体”看成一种架构。</p>
+<p>优点：</p>
+<ul>
+<li>易于开发、易于测试、易于部署</li>
+<li>进程内的高效交互</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>性能要求难以超越单机</li>
+<li>开发人员规模难以超过“2 Pizza Teams”</li>
+<li>所有代码运行在同一个进程空间之内，某一个功能一旦出问题（内存泄漏、线程爆炸、阻塞、死循环等），都将会影响到整个程序的运行</li>
+<li>代码无法隔离，无法做到单独停止、更新、升级某一部分代码</li>
+<li>无法技术异构（技术异构是说允许系统的每个模块，自由选择不一样的程序语言、不一样的编程框架等技术栈去实现）</li>
+</ul>
+<p>单体系统的真正缺陷实际上并不在于要如何拆分，而在于拆分之后，它会存在隔离与自治能力上的欠缺。</p>
+<p>单体架构并不会消失，因其架构简单，易于开发测试和部署，适用于项目初始阶段，便于业务的快速上线。</p>
+<h2 id="SOA时代"><a href="#SOA时代" class="headerlink" title="SOA时代"></a>SOA时代</h2><p>SOA架构模式之前，三种有代表性服务拆分架构模式</p>
+<ol>
+<li>烟筒式架构：系统独立，信息孤岛</li>
+<li>微内核架构：共享公共主数据，子系统无法直接互通</li>
+<li>事件驱动架构：建立事件队列管道，子系统通过管道解耦交互</li>
+</ol>
+<p>“面向服务的架构”（Service Oriented Architecture，SOA）的概念最早1994年提出，2006成立OSOA联盟来联合制定和推进 SOA 相关行业标准，2007在OASIS的倡议与支持下，共同新成立了Open CSA组织，管理制定SOA的行业标准。</p>
+<p>SOA最根本的目标，就是希望能够总结出一套自上而下的软件研发方法论，它有完善的理论和工具，让企业只需要跟着它的思路，就能够一揽子解决掉软件开发过程中的全套问题。如真如此可以大幅提升整个社会实施信息化的效率。</p>
+<p>但遗憾的是，因为SOA架构过于严谨精密的流程与理论，给架构带来了过度的复杂性，需要有懂得复杂概念的专业人员才能够驾驭。它可以实现多个异构大型系统之间的复杂集成交互，却很难作为一种具有广泛普适性的软件架构风格来推广。</p>
+<h2 id="微服务时代"><a href="#微服务时代" class="headerlink" title="微服务时代"></a>微服务时代</h2><blockquote>
+<p>“Micro-Web-Service”，指的是一种专注于单一职责的、与语言无关的、细粒度的 Web 服务。</p>
+</blockquote>
+<p>微服务是一种通过多个小型服务的组合，来构建单个应用的架构风格，这些服务会围绕业务能力而非特定的技术标准来构建。各个服务可以采用不同的编程语言、不同的数据存储技术、运行在不同的进程之中。服务会采取轻量级的通讯机制和自动化的部署机制，来实现通讯与运维。</p>
+<p>微服务的九个核心的业务与技术特征</p>
+<ol>
+<li>围绕业务能力构建：康威定律(有怎样的结构、规模和能力的团队，就会产生出对应结构、规模、能力的产品)</li>
+<li>分散治理：谁家孩子谁来管，技术异构</li>
+<li>通过服务来实现独立自治的组件：独立、自治</li>
+<li>产品化思维：把服务看做持续改进、提升的产品</li>
+<li>数据去中心化：数据应该按领域来分散管理、更新、维护和存储</li>
+<li>轻量级通讯机制：处理事务、一致性、认证授权等一系列工作应该在服务自己的Endpoint上解决</li>
+<li>容错性设计：接受服务总会出错的现实</li>
+<li>演进式设计：承认服务会被报废淘汰</li>
+<li>基础设施自动化：CI/CD，大大降低了构建、发布、运维工作的复杂性</li>
+</ol>
+<p>微服务追求的是更加自由的架构风格，它摒弃了SOA中几乎所有可以抛弃的约束和规定，提倡以“实践标准”代替“规范标准”。</p>
+<p>服务的注册发现、跟踪治理、负载均衡、故障隔离、认证授权、伸缩扩展、传输通讯、事务处理等问题，在微服务中，都不再会有统一的解决方案。</p>
+<p>Spring Cloud这样的胶水式的全家桶工具集，通过一致的接口、声明和配置，进一步屏蔽了源自于具体工具、框架的复杂性，降低了在不同工具、框架之间切换的成本。</p>
+<h2 id="后微服务时代-云原生时代"><a href="#后微服务时代-云原生时代" class="headerlink" title="后微服务时代/云原生时代"></a>后微服务时代/云原生时代</h2><p>微服务时代，注册发现、跟踪治理、负载均衡、传输通讯等，这些问题我们都需要在应用服务层面处理，而不是基础设施层面去解决这些分布式问题，完全是因为由硬件构成的基础设施，跟不上由软件构成的应用服务的灵活性。随着虚拟化和容器化技术的发展，这些问题好像都可以解决了。</p>
+<p>针对同一个分布式服务的问题，对比下 Spring Cloud 中提供的应用层面的解决方案，以及 Kubernetes 中提供的基础设施层面的解决方案<br><img src="https://static001.geekbang.org/resource/image/bb/d6/bb53ddc9eec69bd1cd175aa50d64d7d6.jpg"></p>
+<p>Kubernetes 的确提供了一条全新的、前途更加广阔的解题思路。</p>
+<p>当虚拟化的基础设施，开始从单个服务的容器发展到由多个容器构成的服务集群，以及集群所需的所有通讯、存储设施的时候，软件与硬件的界限就开始模糊了。<br>原来只能从软件层面解决的分布式架构问题，于是有了另外一种解法：应用代码与基础设施软硬一体，合力应对。</p>
+<h2 id="无服务时代"><a href="#无服务时代" class="headerlink" title="无服务时代"></a>无服务时代</h2><p>“无服务“与“微服务”和“云原生”并没有继承替代关系，“无服务比微服务更加先进“是的错误想法。</p>
+<p>无服务架构简单，分为两块内容</p>
+<ul>
+<li>后端设施：是指数据库、消息队列、日志、存储等这一类用于支撑业务逻辑运行，但本身无业务含义的技术组件。这些后端设施都运行在云中，也就是无服务中的“后端即服务”（Backend as a Service，BaaS）</li>
+<li>函数：业务逻辑代码。这里函数的概念与粒度，都已经和程序编码角度的函数非常接近了，区别就在于，无服务中的函数运行在云端，不必考虑算力问题和容量规划</li>
+</ul>
+<p>无服务的愿景是让开发者只需要纯粹地关注业务</p>
+<ol>
+<li>不用考虑技术组件，因为后端的技术组件是现成的，可以直接取用，没有采购、版权和选型的烦恼</li>
+<li>不需要考虑如何部署，因为部署过程完全是托管到云端的，由云端自动完成</li>
+<li>不需要考虑算力，因为有整个数据中心的支撑，算力可以认为是无限的</li>
+<li>不需要操心运维，维护系统持续地平稳运行是云服务商的责任，而不再是开发者的责任</li>
+</ol>
+<p>无服务中短期内的发展局限性</p>
+<ul>
+<li>与单体架构、微服务架构不同，无服务架构天生的一些特点，比如冷启动、 无状态、运行时间有限制等等，决定了它不是一种具有普适性的架构模式</li>
+<li>擅长短链接、无状态、适合事件驱动的交互形式，不适用于具有业务逻辑复杂、依赖服务端状态、响应速度要求较高、需要长连接等特征的应用</li>
+</ul>
+<p>如果说微服务架构是分布式系统这条路当前所能做到的极致，那无服务架构，也许就是“不分布式”的云端系统这条路的起点。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.lights8080.com/p/a289ccb9.html" title="凤凰架构-架构演进" target="_blank" rel="external">http://www.lights8080.com/p/a289ccb9.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://www.lights8080.com" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://www.lights8080.com" target="_blank"><span class="text-dark">七路灯</span><small class="ml-1x">从事互联网开发，信奉终身成长的技术人</small></a></h3>
+        <div>人的一生应当有许多停靠站，我但愿每一个站台都有一盏雾中的灯。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/p/70598b0f.html" title="凤凰架构-向微服务迈进"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/p/1b7e41a.html" title="凤凰架构-程序员发展观和价值观"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo, wechat" data-mobile-sites="weibo, wechat"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	<!-- Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>. -->
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '0A4Cg4vm7SmX0sfL9lfvExSq-gzGzoHsz',
+    appKey: 'jkuwap2Fh3CKBlP1SO59uyb4',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?d3fc7929daaac13ce6f82be8d6f62525";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>

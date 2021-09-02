@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>凤凰架构-透明多层分流系统 | 七路灯</title>
+  <meta name="description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凤凰架构-透明多层分流系统">
+<meta property="og:url" content="http://www.lights8080.com/p/fd2df2c4.html">
+<meta property="og:site_name" content="七路灯">
+<meta property="og:description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/kCQhKS.png">
+<meta property="og:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/uHa47g.jpg">
+<meta property="article:published_time" content="2021-08-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-10T01:40:00.000Z">
+<meta property="article:author" content="七路灯">
+<meta property="article:tag" content="凤凰架构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/kCQhKS.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.lights8080.com/p/fd2df2c4.html">
+  
+    <link rel="alternate" href="/atom.xml" title="七路灯" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://www.lights8080.com" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">七路灯</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">从事互联网开发，信奉终身成长的技术人</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎关注公众号共同交流学习!</p>
+            </div>
+            <div class="content">
+                <img src="/../images/gongzhonghao-qrcode.jpg" alt="site.qrcode_alt" title="site.qrcode_title" />
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">9</span></li></ul></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.5px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.83px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.17px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.67px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.17px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.17px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.17px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.17px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.5px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.33px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.83px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.17px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.17px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 13px;">架构</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.5px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.5px;">语录</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/7fc5d86f.html" class="title">2108-4-企业文化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-26T16:00:00.000Z" itemprop="datePublished">2021-08-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/418eb76d.html" class="title">2108-3-从NBA看职场</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-19T16:00:00.000Z" itemprop="datePublished">2021-08-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/197f72b3.html" class="title">2108-2-K12双减的深度思考</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-12T16:00:00.000Z" itemprop="datePublished">2021-08-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/fd2df2c4.html" class="title">凤凰架构-透明多层分流系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-08T16:00:00.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/f438d8cc.html" class="title">2108-1-什么才是给孩子最好的礼物</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-05T16:00:00.000Z" itemprop="datePublished">2021-08-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-读书笔记/凤凰架构/凤凰架构-透明多层分流系统" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      凤凰架构-透明多层分流系统
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/p/fd2df2c4.html" class="article-date">
+	  <time datetime="2021-08-08T16:00:00.000Z" itemprop="datePublished">2021-08-09</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a>►<a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/p/fd2df2c4.html" class="leancloud_visitors"  data-flag-title="凤凰架构-透明多层分流系统">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/p/fd2df2c4.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 17(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>周志明《凤凰架构：构建可靠的大型分布式系统》<br><a target="_blank" rel="noopener" href="https://icyfenix.cn/">https://icyfenix.cn/</a></p>
+<p>包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡</p>
+<span id="more"></span>
+<p>透明多级分流系统的设计原则：</p>
+<ul>
+<li>第一个原则是尽可能减少单点部件，如果某些单点是无可避免的，则应尽最大限度减少到达单点部件的流量。</li>
+<li>第二个原则是奥卡姆剃刀原则，它更为关键。”如无必要，勿增实体“</li>
+</ul>
+<h2 id="域名解析-DNS"><a href="#域名解析-DNS" class="headerlink" title="域名解析(DNS)"></a>域名解析(DNS)</h2><p>以 <a target="_blank" rel="noopener" href="http://www.icyfenix.com.cn/">www.icyfenix.com.cn</a> 为例，介绍DNS把域名解析成IP地址的过程：</p>
+<ol>
+<li>客户端先检查本地的 DNS 缓存，查看是否存在并且是存活着的该域名的地址记录。</li>
+<li>客户端将地址发送给本机操作系统中配置的本地 DNS（Local DNS）</li>
+<li>本地 DNS 收到查询请求后，会按照顺序依次查找地址记录，“ <a target="_blank" rel="noopener" href="http://www.icyfenix.com.cn/">www.icyfenix.com.cn</a> 的权威服务器”→“ icyfenix.com.cn 的权威服务器”→“ com.cn 的权威服务器”→“cn 的权威服务器”→“根域名服务器“。</li>
+<li>现在假设本地 DNS 是全新的，上面不存在任何域名的权威服务器记录，当 DNS 查询请求一直查到根域名服务器之后，会得到“cn 的权威服务器”的地址记录，然后通过“cn 的权威服务器”，得到“com.cn 的权威服务器”的地址记录，以此类推，最后找到能够解释 <a target="_blank" rel="noopener" href="http://www.icyfenix.com.cn/">www.icyfenix.com.cn</a> 的权威服务器地址。</li>
+<li>通过“<a target="_blank" rel="noopener" href="http://www.icyfenix.com.cn/">www.icyfenix.com.cn</a> 的权威服务器”，查询 <a target="_blank" rel="noopener" href="http://www.icyfenix.com.cn/">www.icyfenix.com.cn</a> 的地址记录。</li>
+</ol>
+<p>DNS 的分级查询都有可能受到中间人攻击的威胁，产生被劫持的风险。</p>
+<p>HTTPDNS（也称为 DNS over HTTPS，DoH）：它把原本的 DNS 解析服务开放为一个基于 HTTPS 协议的查询服务，替代基于 UDP 传输协议的 DNS 域名解析，通过程序代替操作系统直接从权威 DNS，或者可靠 Local DNS 获取解析数据，从而绕过传统 Local DNS。</p>
+<blockquote>
+<p>“切勿浪费较多东西，去做‘用较少的东西，同样可以做好的事情’。”<br>手上有个新锤子，看啥都是对口的钉子。</p>
+</blockquote>
+<h2 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h2><p>分为强制缓存和协商缓存，这两套机制是并行工作。当强制缓存超过时效或者被禁用，协商缓存也仍然可以正常工作。</p>
+<h3 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h3><p>根据资源的修改时间进行检查</p>
+<h4 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h4><p>Expires 是 HTTP/1.0 协议中开始提供的 Header，后面跟随了一个截止时间参数</p>
+<blockquote>
+<p>HTTP/1.1 200 OK<br>Expires: Wed, 8 Apr 2020 07:28:00 GMT</p>
+</blockquote>
+<p>问题：</p>
+<ul>
+<li>受限于客户端的本地时间</li>
+<li>无法处理涉及到用户身份的私有资源</li>
+<li>无法描述“不缓存”的语义</li>
+</ul>
+<h4 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h4><p>Cache-Control 是 HTTP/1.1 协议中定义的强制缓存 Header，与 Expires 同时存在，且语义存在冲突时，IETF 规定必须以 Cache-Control 为准。</p>
+<blockquote>
+<p>HTTP/1.1 200 OK<br>Cache-Control: max-age=600</p>
+</blockquote>
+<ul>
+<li>max-age：相对于请求时间多少秒内，缓存是有效的</li>
+<li>s-maxage：“共享缓存”的有效时间，即允许被 CDN、代理等持有的缓存有效时间</li>
+<li>public：意味着资源可以被代理、CDN 等缓存</li>
+<li>private：就意味着只能由用户的客户端进行私有缓存</li>
+<li>no-cache：表明该资源不应该被缓存，哪怕是同一个会话中对同一个 URL 地址的请求</li>
+<li>no-store：不强制会话中是否重复获取相同的 URL 资源，禁止浏览器、CDN 等以任何形式保存该资源</li>
+<li>no-transform：禁止资源以任何形式被修改，包括Content-Encoding、Content-Range、Content-Type</li>
+<li>min-fresh：仅用于客户端的请求 Header，用于建议服务器能返回一个不少于该时间的缓存资源</li>
+<li>only-if-cached：表示客户端只会接受代理缓存，而不会接受源服务器的响应。如果代理缓存无效，就直接返回 503/Service Unavailable 错误</li>
+<li>must-revalidate：表示在资源过期后，一定要从服务器中进行获取</li>
+<li>proxy-revalidate：用于提示代理、CDN 等设备资源过期后的缓存行为，语义与 must-revalidate 完全一致</li>
+</ul>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>根据资源唯一标识是否发生变化来进行检查</p>
+<h4 id="根据资源的修改时间进行检查"><a href="#根据资源的修改时间进行检查" class="headerlink" title="根据资源的修改时间进行检查"></a>根据资源的修改时间进行检查</h4><p>Last-Modified：服务器的响应 Header，用来告诉客户端这个资源的最后修改时间<br>If-Modified-Since：客户端再次请求时，会通过 If-Modified-Since，把之前收到的资源最后修改时间发送回服务端</p>
+<p>服务端发现资源在该时间后没有被修改过，就只要返回一个 304/Not Modified 的响应即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 304 Not Modified</span><br><span class="line">Cache-Control: public, max-age=600</span><br><span class="line">Last-Modified: Wed, 8 Apr 2020 15:31:30 GMT</span><br></pre></td></tr></table></figure>
+
+<h4 id="根据资源唯一标识是否发生变化来进行检查"><a href="#根据资源唯一标识是否发生变化来进行检查" class="headerlink" title="根据资源唯一标识是否发生变化来进行检查"></a>根据资源唯一标识是否发生变化来进行检查</h4><p>Etag：是服务器的响应 Header，用于告诉客户端这个资源的唯一标识<br>If-None-Match：当客户端需要再次请求时，就会通过 If-None-Match，把之前收到的资源唯一标识发送回服务端</p>
+<h2 id="传输链路"><a href="#传输链路" class="headerlink" title="传输链路"></a>传输链路</h2><h3 id="前端网页的优化技巧"><a href="#前端网页的优化技巧" class="headerlink" title="前端网页的优化技巧"></a>前端网页的优化技巧</h3><ul>
+<li>最少请求数量：TCP连接开销很大，解决手段有雪碧图，文件合并，媒体内联等</li>
+<li>扩大并发请求数：现代浏览器一般支持6个并发请求，解决手段域名分片</li>
+<li>启用压缩传输：减少网络传输内容的大小</li>
+<li>避免页面重定向：页面发生了重定向，就会延迟整个文档的传输</li>
+<li>按重要性调节资源优先级：对客户端展示影响大的资源，放在 HTML 的头部，以便优先下载</li>
+<li>…</li>
+</ul>
+<p>因为 HTTP 协议还在持续发展，这些优化技巧可能会成为反模式。<br>HTTP/3以前是以 TCP 为传输层的应用层协，TCP 协议本身是面向长时间、大数据传输来设计的。<br>而每个页面包含的资源（HTML、CSS、JS、图片等）的特征是，数量多，资源小。<br>以至于 HTTP/1.x 时代，大量短而小的 TCP 连接导致了网络性能的瓶颈。</p>
+<h3 id="Keep-Alive-机制"><a href="#Keep-Alive-机制" class="headerlink" title="Keep-Alive 机制"></a>Keep-Alive 机制</h3><p>（HTTP/1.0 中不是默认开启的，HTTP/1.1 中变为默认）<br>原理是让客户端对同一个域名长期持有一个或多个不会用完即断的 TCP 连接。客户端维护一个 FIFO 队列，每次取完数据之后的一段时间内，不自动断开连接，下一个资源时可以直接复用，避免创建 TCP 连接的成本。</p>
+<p>副作用：队首阻塞，首个资源是一个复杂的请求，导致后面的请求必须阻塞等待。</p>
+<h3 id="HTTP-2-的多路复用技术"><a href="#HTTP-2-的多路复用技术" class="headerlink" title="HTTP/2 的多路复用技术"></a>HTTP/2 的多路复用技术</h3><p>在 HTTP/1.x 中，HTTP 请求就是传输过程中最小粒度的信息单位，如果将多个请求切碎，再混杂在一块传输，客户端难以分辨重组出有效信息。<br>而在 HTTP/2 中，帧（Frame）才是最小粒度的信息单位。它可以用来描述各种数据，比如请求的 Headers、Body，或者是用来做控制标识，如打开流、关闭流。<br>流（Stream）是一个逻辑上的数据通道概念，每个帧都附带有一个流 ID，以标识这个帧属于哪个流。</p>
+<p>多路复用的支持，HTTP/2 就可以对每个域名只维持一个 TCP 连接，开发者也不用去考虑并发请求数限制，客户端就不需要再刻意压缩 HTTP 请求。</p>
+<p>在 HTTP 传输中，Headers 占传输成本的比重是相当地大，HTTP/2 中专门考虑如何进行 Header 压缩的问题，同一个连接上产生的请求和响应越多，头部压缩效果也就越好。所以 HTTP/2 是单域名单连接的机制，合并资源和域名分片反而对性能提升不利。</p>
+<p>与 HTTP/1.x 相反，HTTP/2 本身反而变得更适合传输小资源。</p>
+<h3 id="传输压缩"><a href="#传输压缩" class="headerlink" title="传输压缩"></a>传输压缩</h3><p>当客户端可以接受压缩版本的资源时（请求的 Header 中包含 Accept-Encoding: gzip），就返回压缩后的版本（响应的 Header 中包含 Content-Encoding: gzip），否则就返回未压缩的原版。</p>
+<h4 id="静态预压缩"><a href="#静态预压缩" class="headerlink" title="静态预压缩"></a>静态预压缩</h4><p>在网络时代的早期，服务器的处理能力还很薄弱，为了启用压缩，会把静态资源预先压缩为.gz 文件的形式给存放起来。</p>
+<h4 id="即时压缩"><a href="#即时压缩" class="headerlink" title="即时压缩"></a>即时压缩</h4><p>现代的 Web 服务器处理能力有了大幅提升，整个压缩过程全部在内存的数据流中完成，不必等资源压缩完成再返回响应，这样可以显著提高首字节时间，改善 Web 性能体验。</p>
+<p>在 HTTP/1.0 时，资源结束判断的机制，只有根据 Content-Length 判断。<br>但即时压缩时，服务器再也没有办法给出 Content-Length 这个响应 Header 了。<br>所以，如果是 HTTP/1.0 的话，持久连接和即时压缩只能二选其一。<br>在 HTTP/1.0 中这两者都支持，却默认都是不启用。</p>
+<h4 id="分块编码"><a href="#分块编码" class="headerlink" title="分块编码"></a>分块编码</h4><p>HTTP/1.1中，增加了另一种资源结束判断的机制，“分块传输编码”（Chunked Transfer Encoding）。</p>
+<p>工作原理：在响应 Header 中加入“Transfer-Encoding: chunked”之后，就代表这个响应报文将采用分块编码。此时，报文中的 Body 需要改为用一系列“分块”来传输。每个分块包含十六进制的长度值和对应长度的数据内容，长度值独占一行，数据从下一行开始。最后以一个长度值为 0 的分块，来表示资源结束。</p>
+<h3 id="快速-UDP-网络连接"><a href="#快速-UDP-网络连接" class="headerlink" title="快速 UDP 网络连接"></a>快速 UDP 网络连接</h3><p>想从根本上改进 HTTP，就必须直接替换掉 HTTP over TCP 的根基，即 TCP 传输协议。2018 年末，IETF 正式批准了 HTTP over QUIC 使用 HTTP/3 的版本号，它会以 UDP 协议作为基础。</p>
+<h2 id="内容分发网络-CDN"><a href="#内容分发网络-CDN" class="headerlink" title="内容分发网络(CDN)"></a>内容分发网络(CDN)</h2><p>CDN 其实就是做“内容分销”工作的。</p>
+<p>内容分发网络的工作过程，主要涉及到路由解析、内容分发、负载均衡和它所能支持的应用内容四个方面。</p>
+<p>仅从网络传输的角度来看，一个互联网系统的速度快慢，主要取决于以下四点因素：</p>
+<ol>
+<li>网站服务器接入网络运营商的链路所能提供的出口带宽。</li>
+<li>用户客户端接入网络运营商的链路所能提供的入口带宽。</li>
+<li>从网站到用户之间，经过的不同运营商之间互联节点的带宽。</li>
+<li>从网站到用户之间的物理链路传输时延。</li>
+</ol>
+<h3 id="路由解析"><a href="#路由解析" class="headerlink" title="路由解析"></a>路由解析</h3><p><img src="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/kCQhKS.png" alt="CDN 路由解析"></p>
+<h3 id="内容分发"><a href="#内容分发" class="headerlink" title="内容分发"></a>内容分发</h3><p>无论是对用户还是服务器，内容分发网络都可以是完全透明的，CDN需要解决两个问题：“如何获取源站资源”和“如何管理（更新）资源”。</p>
+<h4 id="第一种：主动分发（Push）"><a href="#第一种：主动分发（Push）" class="headerlink" title="第一种：主动分发（Push）"></a>第一种：主动分发（Push）</h4><p>主动分发就是由源站主动发起，将内容从源站或者其他资源库推送到用户边缘的各个 CDN 缓存节点上。</p>
+<p>通常需要源站、CDN 服务双方提供的程序 API 接口层面的配合。</p>
+<h4 id="第二种：被动回源（Pull）"><a href="#第二种：被动回源（Pull）" class="headerlink" title="第二种：被动回源（Pull）"></a>第二种：被动回源（Pull）</h4><p>由用户访问所触发的全自动、双向透明的资源缓存过程。当某个资源首次被用户请求的时候，CDN 缓存节点如果发现自己没有该资源，就会实时从源站中获取。</p>
+<p>可以做到完全的双向透明，不需要源站在程序上做任何的配合，使用起来非常方便。</p>
+<h4 id="如何管理（更新）资源"><a href="#如何管理（更新）资源" class="headerlink" title="如何管理（更新）资源"></a>如何管理（更新）资源</h4><p>对于Cache-Control的 s-maxage，是否遵循，完全取决于 CDN 本身的实现策略。</p>
+<p>CDN 缓存的管理没有通用的准则，最常见的管理（更新）资源的做法是超时被动失效与手工主动失效相结合。</p>
+<h3 id="CDN-应用"><a href="#CDN-应用" class="headerlink" title="CDN 应用"></a>CDN 应用</h3><ul>
+<li>加速静态资源</li>
+<li>安全防御，DDoS攻击</li>
+<li>协议升级，https，IPv6</li>
+<li>状态缓存</li>
+<li>修改资源，给源站不支持跨域的资源提供跨域能力</li>
+<li>访问控制，QoS控制，referer防盗链</li>
+<li>注入功能，Google Analytics等</li>
+</ul>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>“负载均衡器”（Load Balancer）：承担了调度后方的多台机器，以统一的接口对外提供服务的技术组件。</p>
+<p>从形式上来说都可以分为两种：四层负载均衡和七层负载均衡。四层负载均衡的优势是性能高，七层负载均衡的优势是功能强。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><div style="width:135px"><strong>层</strong></div></th>
+<th><div style="width:75px"><strong>数据单元</strong></div></th>
+<th><strong>功能</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>应用层 <br/>Application Layer</td>
+<td>数据<br/>Data</td>
+<td>提供为应用软件提供服务的接口，用于与其他应用软件之间的通信。典型协议：HTTP、HTTPS、FTP、Telnet、SSH、SMTP、POP3 等</td>
+</tr>
+<tr>
+<td>6</td>
+<td>表达层<br/>Presentation Layer</td>
+<td>数据 <br/>Data</td>
+<td>把数据转换为能与接收者的系统格式兼容并适合传输的格式。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>会话层 <br/>Session Layer</td>
+<td>数据 <br/>Data</td>
+<td>负责在数据传输中设置和维护计算机网络中两台计算机之间的通信连接。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>传输层 <br/>Transport Layer</td>
+<td>数据段<br/>Segments</td>
+<td>把传输表头加至数据以形成数据包。传输表头包含了所使用的协议等发送信息。典型协议：TCP、UDP、RDP、SCTP、FCP 等</td>
+</tr>
+<tr>
+<td>3</td>
+<td>网络层 <br/>Network Layer</td>
+<td>数据包<br/>Packets</td>
+<td>决定数据的传输路径选择和转发，将网络表头附加至数据段后以形成报文（即数据包）。典型协议：IPv4/IPv6、IGMP、ICMP、EGP、RIP 等</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据链路层 <br/>Data Link Layer</td>
+<td>数据帧<br/>Frame</td>
+<td>负责点对点的网络寻址、错误侦测和纠错。当表头和表尾被附加至数据包后，就形成数据帧（Frame）。典型协议：WiFi（802.11）、Ethernet（802.3）、PPP 等。</td>
+</tr>
+<tr>
+<td>1</td>
+<td>物理层<br/>Physical Layer</td>
+<td>比特流<br/>Bit</td>
+<td>在局域网上传送数据帧，它负责管理电脑通信设备和网络媒体之间的互通。包括了针脚、电压、线缆规范、集线器、中继器、网卡、主机接口卡等。</td>
+</tr>
+</tbody></table>
+<h4 id="四层负载均衡"><a href="#四层负载均衡" class="headerlink" title="四层负载均衡"></a>四层负载均衡</h4><p>四层负载均衡的工作模式都属于“转发”，即直接将承载着 TCP 报文的底层数据格式（IP 数据包或以太网帧），转发到真实服务器上，此时客户端到响应请求的真实服务器维持着同一条 TCP 通道。</p>
+<p><strong>数据链路层负载均衡</strong><br>数据链路层传输的内容是数据帧（Frame），只需要注意到“MAC 目标地址”和“MAC 源地址”两项即可。</p>
+<p>工作原理：修改请求的数据帧中的 MAC 目标地址，让用户原本是发送给负载均衡器的请求的数据帧，被二层交换机根据新的 MAC 目标地址，转发到服务器集群中，对应的服务器的网卡上，这样真实服务器就获得了一个原本目标并不是发送给它的数据帧。</p>
+<p>数据链路层负载均衡的工作模式是，只有请求会经过负载均衡器，而服务的响应不需要从负载均衡器原路返回，整个请求、转发、响应的链路形成了一个“三角关系”，又叫“三角传输模式”，“单臂模式”，“直接路由”。</p>
+<p>二层负载均衡器工作原理决定了，它们必须位于同一个子网当中，无法跨 VLAN。这个优势（效率高）和劣势（不能跨子网）就共同决定了，数据链路层负载均衡最适合用来做数据中心的第一级均衡设备，用来连接其他的下级负载均衡器。</p>
+<p><strong>网络层负载均衡</strong><br>网络层传输的单位是分组数据包（Packets），只要知道在 IP 分组数据包的 Headers 带有源和目标的 IP 地址即可。</p>
+<p>第一种：保持原来的数据包不变，新创建一个数据包。(IP隧道)<br>优点：</p>
+<ul>
+<li>并没有修改原有数据包中的任何信息，仍然具备三角传输特性</li>
+<li>IP 隧道工作在网络层，所以可以跨越 VLAN</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>真实服务器收到数据包后，必须在接收入口处，设计拆包机制。(几乎所有Linux系统都支持IP隧道协议)</li>
+<li>必须保证所有的真实服务器与均衡器有着相同的虚拟 IP 地址</li>
+</ul>
+<p>第二种：改变目标数据包，直接把数据包 Headers 中的目标地址改掉(NAT 模式)<br>NAT模式：充当了家里、公司、学校的上网路由器的作用。</p>
+<p>优点：</p>
+<ul>
+<li>没有经过 IP 隧道的额外包装，无需再拆包了</li>
+<li>彻底的透明，真实服务器连网关都不需要配置，均衡器在转发时不仅修改目标 IP 地址，连源 IP 地址也一起改了</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>不具备三角传输特性，必须回到负载均衡，改回自己的IP，再发给客户端。流量压力比较大时，带来较大的性能损失</li>
+<li>真实服务器处理请求时就无法拿到客户端的 IP 地址</li>
+</ul>
+<h4 id="应用层负载均衡"><a href="#应用层负载均衡" class="headerlink" title="应用层负载均衡"></a>应用层负载均衡</h4><p>工作在四层之后的负载均衡模式就无法再进行转发了，只能进行代理。此时正式服务器、负载均衡器、客户端三者之间，是由两条独立的 TCP 通道来维持通讯的。</p>
+<p><img src="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/uHa47g.jpg" alt="转发与代理"></p>
+<p>分类：</p>
+<ul>
+<li>正向代理就是我们通常简称的代理，意思就是在客户端设置的、代表客户端与服务器通讯的代理服务。它是客户端可知，而对服务器是透明的。</li>
+<li>反向代理是指设置在服务器这一侧，代表真实服务器来与客户端通讯的代理服务。此时它对客户端来说是透明的。</li>
+<li>透明代理是指对双方都透明的，配置在网络中间设备上的代理服务。比如，架设在路由器上的透明翻墙代理。</li>
+</ul>
+<p>七层负载均衡器，不能去做下载站、视频站这种流量应用，起码不能作为第一级均衡器。<br>缺点：网络性能比不过四层负载均衡器，多一轮TCP握手，还有 NAT 转发模式一样的带宽问题<br>优点：可以感知应用层通讯的具体内容，往往能够做出更明智的决策</p>
+<p>应用：</p>
+<ul>
+<li>缓存方面的工作，比如静态资源缓存、协议升级、安全防护、访问控制等</li>
+<li>更智能化的路由，比如Session 路由、亲和性集群、URL路由、根据用户路由等</li>
+<li>某些安全攻击可以由七层负载均衡器来抵御，比如DDoS 手段是 SYN Flood 攻击</li>
+<li>链路治理措施，比如服务降级、熔断、异常注入等</li>
+<li>…</li>
+</ul>
+<h4 id="均衡策略与实现"><a href="#均衡策略与实现" class="headerlink" title="均衡策略与实现"></a>均衡策略与实现</h4><p>均衡策略与实现</p>
+<ul>
+<li>轮循均衡</li>
+<li>权重轮循均衡</li>
+<li>随机均衡</li>
+<li>权重随机均衡</li>
+<li>一致性哈希均衡</li>
+<li>响应速度均衡</li>
+<li>最少连接数均衡</li>
+</ul>
+<p>负载均衡器的实现有“软件均衡器”和“硬件均衡器”两类。</p>
+<p>软件均衡器又分为直接建设在操作系统内核的均衡器和应用程序形式的均衡器两种。前者的代表是 LVS（Linux Virtual Server），后者的代表有 Nginx、HAProxy、KeepAlived，等等；前者的性能会更好，因为它不需要在内核空间和应用空间中来回复制数据包；而后者的优势是选择广泛，使用方便，功能不受限于内核版本。</p>
+<p>硬件均衡器，往往会直接采用应用专用集成电路来实现。因为它有专用处理芯片的支持，可以避免操作系统层面的损耗，从而能够达到最高的性能。这类的代表就是著名的 F5 和 A10 公司的负载均衡产品。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.lights8080.com/p/fd2df2c4.html" title="凤凰架构-透明多层分流系统" target="_blank" rel="external">http://www.lights8080.com/p/fd2df2c4.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://www.lights8080.com" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://www.lights8080.com" target="_blank"><span class="text-dark">七路灯</span><small class="ml-1x">从事互联网开发，信奉终身成长的技术人</small></a></h3>
+        <div>人的一生应当有许多停靠站，我但愿每一个站台都有一盏雾中的灯。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/p/197f72b3.html" title="2108-2-K12双减的深度思考"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/p/f438d8cc.html" title="2108-1-什么才是给孩子最好的礼物"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo, wechat" data-mobile-sites="weibo, wechat"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	<!-- Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>. -->
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '0A4Cg4vm7SmX0sfL9lfvExSq-gzGzoHsz',
+    appKey: 'jkuwap2Fh3CKBlP1SO59uyb4',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?d3fc7929daaac13ce6f82be8d6f62525";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Elasticsearch-索引（Index） | 七路灯</title>
+  <meta name="description" content="Elasticsearch索引介绍，包括索引设置、索引模板、索引生命周期管理、翻滚索引、索引别名、滚动索引。 基于7.11版本。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch-索引（Index）">
+<meta property="og:url" content="http://www.lights8080.com/p/cae9608.html">
+<meta property="og:site_name" content="七路灯">
+<meta property="og:description" content="Elasticsearch索引介绍，包括索引设置、索引模板、索引生命周期管理、翻滚索引、索引别名、滚动索引。 基于7.11版本。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-03T01:47:54.000Z">
+<meta property="article:author" content="七路灯">
+<meta property="article:tag" content="ELK">
+<meta property="article:tag" content="Elasticsearch">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.lights8080.com/p/cae9608.html">
+  
+    <link rel="alternate" href="/atom.xml" title="七路灯" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://www.lights8080.com" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">七路灯</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">从事互联网开发，信奉终身成长的技术人</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎关注公众号共同交流学习!</p>
+            </div>
+            <div class="content">
+                <img src="/../images/gongzhonghao-qrcode.jpg" alt="site.qrcode_alt" title="site.qrcode_title" />
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">9</span></li></ul></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.5px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.83px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.17px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.67px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.17px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.17px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.17px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.17px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.5px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.33px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.83px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.17px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.17px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 13px;">架构</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.5px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.5px;">语录</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/7fc5d86f.html" class="title">2108-4-企业文化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-26T16:00:00.000Z" itemprop="datePublished">2021-08-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/418eb76d.html" class="title">2108-3-从NBA看职场</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-19T16:00:00.000Z" itemprop="datePublished">2021-08-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/197f72b3.html" class="title">2108-2-K12双减的深度思考</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-12T16:00:00.000Z" itemprop="datePublished">2021-08-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/fd2df2c4.html" class="title">凤凰架构-透明多层分流系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-08T16:00:00.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/f438d8cc.html" class="title">2108-1-什么才是给孩子最好的礼物</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-05T16:00:00.000Z" itemprop="datePublished">2021-08-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-技术/ELK/Elasticsearch-索引（Index）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Elasticsearch-索引（Index）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/p/cae9608.html" class="article-date">
+	  <time datetime="2021-04-06T16:00:00.000Z" itemprop="datePublished">2021-04-07</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/ELK/" rel="tag">ELK</a>, <a class="article-tag-link-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/p/cae9608.html" class="leancloud_visitors"  data-flag-title="Elasticsearch-索引（Index）">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/p/cae9608.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 14(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>Elasticsearch索引介绍，包括索引设置、索引模板、索引生命周期管理、翻滚索引、索引别名、滚动索引。<br> 基于7.11版本。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="索引设置（Index-Settings）"><a href="#索引设置（Index-Settings）" class="headerlink" title="索引设置（Index Settings）"></a>索引设置（Index Settings）</h2><h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><p>只能在创建索引时或关闭的索引上设置</p>
+<ul>
+<li>index.number_of_shards：主分片数量，默认1</li>
+<li>index.number_of_routing_shards：拆分索引的路由分片数量，默认值位于2~1024之间，依赖索引主分片数量</li>
+<li>index.shard.check_on_startup：打开前检查分片是否损坏，默认false</li>
+<li>index.codec：压缩存储算法，默认LZ4</li>
+<li>index.routing_partition_size：自定义路由可以到达的分片数量，默认1</li>
+</ul>
+<h3 id="dynamic"><a href="#dynamic" class="headerlink" title="dynamic"></a>dynamic</h3><p>可以使用API实时对索引进行操作</p>
+<ul>
+<li>index.number_of_replicas：主分片的副本数，默认1</li>
+<li>index.auto_expand_replicas：根据集群中数据节点的数量自动扩展副本的数量，默认false</li>
+<li>index.search.idle.after：搜索空闲之前不能接收搜索和获取请求的时间，默认30s</li>
+<li>index.refresh_interval：刷新操作频率，最近对索引的更改既可见，默认1s。-1关闭刷新操作</li>
+<li>index.max_result_window：查询索引结果的最大数量，默认10000</li>
+<li>index.max_inner_result_window：内部或聚合命中最大数量，默认100</li>
+<li>index.max_rescore_window：打分请求的最大索引数量，默认10000（同index.max_result_window）</li>
+<li>index.max_docvalue_fields_search：查询中允许的最大字段数，默认100</li>
+<li>index.max_script_fields：查询中允许的最大脚本字段数，默认32</li>
+<li>index.query.default_field：查询返回的默认字段，默认*（表示所有）</li>
+</ul>
+<h2 id="索引模板（Index-Templates）"><a href="#索引模板（Index-Templates）" class="headerlink" title="索引模板（Index Templates）"></a>索引模板（Index Templates）</h2><p>索引模板是告诉Elasticsearch在创建索引时如何配置索引的一种方法。对于数据流（data stream），索引模板配置是创建他们的后备索引。在创建索引之前先配置模板，模板设置将用作创建索引的基础。</p>
+<p>模板有两种类型，索引模板（index templates）和组件模板（component templates）。</p>
+<p>组件模板是可重用的构建块，用于配置映射（mappings）、设置（settings）和别名（alias）。使用组件模板来构造索引模板，但它们不会直接应用于索引。索引模板可以包含组件模板的集合，也可以直接指定设置，映射和别名。如果匹配多个模板，优先使用优先级最高的模板。</p>
+<p>可以使用模拟API创建索引，确定最终的索引设置。<code>POST /_index_template/_simulate</code>。</p>
+<p>注意事项：</p>
+<ul>
+<li>如果新数据流或索引与多个索引模板匹配，则使用优先级最高的索引模板。</li>
+<li>Elasticsearch内置了许多索引模板（如：metrics-<em>-</em>,logs-*-*），每个模板的优先级是100。如果不想使用内置模板，请为您的模板分配更高的优先级。</li>
+<li>如果显式设置创建索引，并且该索引与索引模板匹配，则创建索引请求中的设置将优先于索引模板中指定的设置。</li>
+<li>索引模板仅在创建索引期间应用。索引模板的更改不会影响现有索引。</li>
+<li>当可组合模板匹配给定索引时，它始终优先于旧模板。如果没有可组合模板匹配，则旧版模板可能仍匹配并被应用。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">PUT _template/datastream_template</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment"># 1.1 匹配所有&quot;datastream-&quot;开头的索引</span></span><br><span class="line">  <span class="string">&quot;index_patterns&quot;</span>: [<span class="string">&quot;datastream-*&quot;</span>],</span><br><span class="line">  <span class="comment"># 2 指定创建数据流索引模板</span></span><br><span class="line">  <span class="string">&quot;data_stream&quot;</span>: &#123;&#125;,</span><br><span class="line">  <span class="string">&quot;settings&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;number_of_shards&quot;</span>: 1,</span><br><span class="line">    <span class="string">&quot;number_of_replicas&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;refresh_interval&quot;</span>: <span class="string">&quot;15s&quot;</span>,</span><br><span class="line">    <span class="comment"># 指定索引管理策略，索引关联策略</span></span><br><span class="line">    <span class="string">&quot;index.lifecycle.name&quot;</span>: <span class="string">&quot;datastream_policy&quot;</span>,</span><br><span class="line">    <span class="comment"># 指定滚动写别名</span></span><br><span class="line">    <span class="string">&quot;index.lifecycle.rollover_alias&quot;</span>: <span class="string">&quot;datastream&quot;</span>,</span><br><span class="line">    <span class="comment"># 满足策略的索引检查频率</span></span><br><span class="line">    <span class="string">&quot;indices.lifecycle.poll_interval&quot;</span>: <span class="string">&quot;10m&quot;</span>,</span><br><span class="line">    <span class="comment"># 跳过滚动</span></span><br><span class="line">    <span class="string">&quot;index.lifecycle.indexing_complete&quot;</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;mappings&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;dynamic_date_formats&quot;</span>: [</span><br><span class="line">      <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>,</span><br><span class="line">      <span class="string">&quot;yyyy-MM-dd HH:mm:ss Z&quot;</span>,</span><br><span class="line">      <span class="string">&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;</span>,</span><br><span class="line">      <span class="string">&quot;yyyy-MM-dd HH:mm:ss.SSS Z&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;_default_&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;_all&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;enabled&quot;</span>: <span class="literal">false</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment"># 1.2 非数据流索引是使用</span></span><br><span class="line">  <span class="string">&quot;aliases&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;last_3_months&quot;</span>: &#123;&#125; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="索引生命周期管理（Index-Lifecycle-Manager-ILM）"><a href="#索引生命周期管理（Index-Lifecycle-Manager-ILM）" class="headerlink" title="索引生命周期管理（Index Lifecycle Manager - ILM）"></a>索引生命周期管理（Index Lifecycle Manager - ILM）</h2><p>配置索引生命周期管理策略，能够随着时间推移根据性能、弹性和保留要求自动的管理索引。</p>
+<p>索引生命周期策略可以触发以下操作：</p>
+<ul>
+<li>翻转（Rollover）：当现有索引达到一定分片大小，文档数或使用年限时，为翻转目标创建新索引。翻转目标可以是索引别名或数据流。</li>
+<li>收缩（Shrink）：减少索引中主碎片的数量。</li>
+<li>强制合并（Force merge）：手动触发合并以减少索引每个分片中的段数，并释放已删除文档所使用的空间。</li>
+<li>冻结（Freeze）：将索引设为只读，并最大程度地减少其内存占用量。</li>
+<li>删除（Delete）：永久删除索引，包括其所有数据和元数据。</li>
+</ul>
+<p>使用ILM可以更轻松地管理热-温-冷体系结构中的索引，在使用时间序列数据时很常见（如日志和指标）。</p>
+<h3 id="索引生命周期（Index-lifecycle）"><a href="#索引生命周期（Index-lifecycle）" class="headerlink" title="索引生命周期（Index lifecycle）"></a>索引生命周期（Index lifecycle）</h3><p>ILM定义了以下四个阶段（Phases）</p>
+<ul>
+<li>Hot：频繁的写入和查询</li>
+<li>Warm：索引不在更新，仍然在查询</li>
+<li>Cold：不再更新的索引，很少查询仍然可以搜索，查询较慢也没关系</li>
+<li>Delete：不再需要的索引，可以安全的删除</li>
+</ul>
+<p>索引的生命周期策略指定了应用于哪些阶段，每个阶段中执行什么操作，以及何时在两个阶段之间进行转换。</p>
+<p>创建索引时可以手动应用生命周期策略。对于时间序列索引，需要将生命周期策略与用于在序列中创建新索引的索引模板相关联。当索引滚动时，不会自动将手动应用的策略应用于新索引。</p>
+<h4 id="阶段转换（phase-transitions）"><a href="#阶段转换（phase-transitions）" class="headerlink" title="阶段转换（phase transitions）"></a>阶段转换（phase transitions）</h4><p>ILM根据其年龄在整个生命周期中移动索引。要控制这些翻转的时间，请为每个阶段设置一个最小年龄。为了使索引移至下一阶段，当前阶段中的所有操作都必须完成，并且索引必须早于下一阶段的最小年龄。</p>
+<p>最小年龄默认为0，这会导致ILM在当前阶段中的所有操作完成后立即将索引移至下一阶段。</p>
+<p>如果索引具有未分配的分片并且集群运行状况为黄色，则索引仍可以根据其索引生命周期管理策略过渡到下一阶段。但是，由于Elasticsearch只能在绿色集群上执行某些清理任务，因此可能会有意外的副作用。</p>
+<h4 id="阶段执行（phase-execution）"><a href="#阶段执行（phase-execution）" class="headerlink" title="阶段执行（phase execution）"></a>阶段执行（phase execution）</h4><p>ILM控制阶段中的动作的执行的顺序，以及哪些步骤是执行每个动作的必要索引操作。</p>
+<p>当索引进入阶段后，ILM将阶段定义信息缓存在索引元数据中，这样可以确保索引政策更新不会将索引置于永远不退出阶段的状态。</p>
+<p>ILM定期运行，检查索引是否符合策略标准，并执行所需的步骤。为了避免竞争情况，ILM可能需要运行多次执行，完成一项动作所需的所有步骤。这意味着即使<code>indexs.lifecycle.poll_interval</code>设置为10分钟并且索引满足翻转条件，也可能需要20分钟才能完成翻转。</p>
+<h4 id="阶段动作（phase-actions）"><a href="#阶段动作（phase-actions）" class="headerlink" title="阶段动作（phase actions）"></a>阶段动作（phase actions）</h4><p>参考<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/7.11/ilm-index-lifecycle.html#ilm-phase-actions">https://www.elastic.co/guide/en/elasticsearch/reference/7.11/ilm-index-lifecycle.html#ilm-phase-actions</a></p>
+<h3 id="索引生命周期动作（Index-Lifecycle-Actions）"><a href="#索引生命周期动作（Index-Lifecycle-Actions）" class="headerlink" title="索引生命周期动作（Index Lifecycle Actions）"></a>索引生命周期动作（Index Lifecycle Actions）</h3><ul>
+<li>Allocate：将分片移动到具有不同性能特征的节点，并减少副本的数量。</li>
+<li>Delete：永久删除索引。</li>
+<li>Force merge：减少索引段的数量并清除已删除的文档。将索引设为只读。</li>
+<li>Freeze：冻结索引以最大程度地减少其内存占用量。</li>
+<li>Migrate：将索引分片移动到对应于当前 ILM 阶段的数据层。</li>
+<li>Read only：阻止对索引的写操作。</li>
+<li>Rollover：移动索引作为滚动别名的写索引，并开始索引到新索引。</li>
+<li>Searchable snapshot：为配置库中的管理索引拍摄快照，并将其作为可搜索快照。</li>
+<li>Set priority：降低索引在生命周期中的优先级，以确保首先恢复热索引。</li>
+<li>Shrink：通过将索引缩小为新索引来减少主碎片的数量。</li>
+<li>Unfollow：将关注者索引转换为常规索引。在Rollover、Shrink和Searchable snapshot操作之前自动执行。</li>
+<li>Wait for snapshot：删除索引之前，请确保快照已存在。</li>
+</ul>
+<h3 id="ILM更新（Lifecycle-policy-updates）"><a href="#ILM更新（Lifecycle-policy-updates）" class="headerlink" title="ILM更新（Lifecycle policy updates）"></a>ILM更新（Lifecycle policy updates）</h3><p>您可以通过修改当前策略或切换到其他策略的方式来更改管理索引或滚动索引集合的生命周期。</p>
+<p>为确保策略更新不会将索引置于无法退出当前阶段的状态，进入这个阶段时，阶段定义会缓存在索引元数据中。如果策略更新可以安全的应用，ILM更新缓冲的阶段定义；如果不能，则使用缓冲阶段定义完成该阶段。</p>
+<h3 id="Rollover（翻转）"><a href="#Rollover（翻转）" class="headerlink" title="Rollover（翻转）"></a>Rollover（翻转）</h3><p>在为日志或指标等时间序列数据编制索引时，不能无限期地写入单个索引。为了满足索引和搜索性能要求并管理资源使用，可以写入索引直到达到某个阈值，然后创建一个新索引并开始写入该索引。</p>
+<p>使用滚动索引能够：</p>
+<ul>
+<li>优化活跃的索引，以在高性能热节点上获得高接收速率。</li>
+<li>针对热节点上的搜索性能进行优化。</li>
+<li>将较旧的，访问频率较低的数据转移到价格较低的冷节点上。</li>
+<li>根据您的保留政策，通过删除整个索引来删除数据。</li>
+</ul>
+<p>我们建议使用数据流来管理时间序列数据。数据流自动跟踪写入索引，同时将配置保持在最低水平。数据流设计用于仅追加数据，其中数据流名称可用作操作（读取，写入，翻转，收缩等）目标。如果您的用例需要就地更新数据，则可以使用索引别名来管理时间序列数据。</p>
+<h4 id="自动翻转（automatic-rollover）："><a href="#自动翻转（automatic-rollover）：" class="headerlink" title="自动翻转（automatic rollover）："></a>自动翻转（automatic rollover）：</h4><p>ILM使您能够根据索引大小，文档数或使用年限自动翻转到新索引。触发翻转后，将创建一个新索引，将写入别名更新为指向新索引，并将所有后续更新写入新索引。<br>与基于时间的过渡相比，基于大小，文档数或使用年限翻转至新索引更可取。在任意时间滚动通常会导致许多小的索引，这可能会对性能和资源使用产生负面影响。</p>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看索引所处哪个阶段、应用策略等</span></span><br><span class="line">GET datastream-*/_ilm/explain</span><br><span class="line"><span class="comment"># 创建索引管理策略</span></span><br><span class="line">PUT _ilm/policy/full_policy</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;policy&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;phases&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;hot&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;actions&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;rollover&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;max_age&quot;</span>: <span class="string">&quot;7d&quot;</span>,</span><br><span class="line">            <span class="string">&quot;max_size&quot;</span>: <span class="string">&quot;50G&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;warm&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;min_age&quot;</span>: <span class="string">&quot;30d&quot;</span>,</span><br><span class="line">        <span class="string">&quot;actions&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;forcemerge&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;max_num_segments&quot;</span>: 1</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot;shrink&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;number_of_shards&quot;</span>: 1</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot;allocate&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;number_of_replicas&quot;</span>: 2</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;cold&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;min_age&quot;</span>: <span class="string">&quot;60d&quot;</span>,</span><br><span class="line">        <span class="string">&quot;actions&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;allocate&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;require&quot;</span>: &#123;</span><br><span class="line">              <span class="string">&quot;box_type&quot;</span>: <span class="string">&quot;cold&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;delete&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;min_age&quot;</span>: <span class="string">&quot;90d&quot;</span>,</span><br><span class="line">        <span class="string">&quot;actions&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;delete&quot;</span>: &#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据流（Data-streams）"><a href="#数据流（Data-streams）" class="headerlink" title="数据流（Data streams）"></a>数据流（Data streams）</h2><p>数据流用于跨多个索引存储仅追加的时间序列数据，同时提供一个用于请求的数据流名称。<br>可以将索引和搜索请求直接提交到数据流。流自动将请求路由到存储流数据的索引。同样可以使用索引生命周期管理（ILM）来自动管理这些后备索引。<br>数据流非常适合日志，事件，指标和其他连续生成的数据。</p>
+<h2 id="索引别名（index-alias）"><a href="#索引别名（index-alias）" class="headerlink" title="索引别名（index alias）"></a>索引别名（index alias）</h2><h4 id="Request-body"><a href="#Request-body" class="headerlink" title="Request body"></a>Request body</h4><ul>
+<li>actions：必填，要执行的一组动作<ul>
+<li>add：添加一个索引别名</li>
+<li>remove：删除一个索引别名</li>
+<li>remove_index：删除索引</li>
+</ul>
+</li>
+</ul>
+<p>actions on alias objects：</p>
+<ul>
+<li>index：指定索引名称，允许逗号分隔或通配符</li>
+<li>alias：指定别名名称，允许逗号分隔或通配符</li>
+<li>filter：使用别名查询时，限制条件</li>
+<li>is_write_index：标记作为别名的写索引，一个别名同时只能有一个写索引</li>
+<li>routing：指定路由到特定分片</li>
+<li>search_routing：搜索路由</li>
+<li>index_routing：索引路由</li>
+</ul>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PUT /&lt;index&gt;/_alias/&lt;<span class="built_in">alias</span>&gt;</span><br><span class="line">DELETE /&lt;index&gt;/_alias/&lt;<span class="built_in">alias</span>&gt;</span><br><span class="line">GET /_alias</span><br><span class="line">GET /_alias/&lt;<span class="built_in">alias</span>&gt;</span><br><span class="line">GET /&lt;index&gt;/_alias/&lt;<span class="built_in">alias</span>&gt;</span><br><span class="line"></span><br><span class="line">POST /_aliases</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;actions&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;remove&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;index&quot;</span>: <span class="string">&quot;test1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;alias&quot;</span>: <span class="string">&quot;alias1&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;add&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;index&quot;</span>: <span class="string">&quot;test&quot;</span>,</span><br><span class="line">                <span class="string">&quot;alias&quot;</span>: <span class="string">&quot;alias1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;is_write_index&quot;</span>: <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;add&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;index&quot;</span>: <span class="string">&quot;test2&quot;</span>,</span><br><span class="line">                <span class="string">&quot;alias&quot;</span>: <span class="string">&quot;alias1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;is_write_index&quot;</span>: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="滚动索引（rollover-index）"><a href="#滚动索引（rollover-index）" class="headerlink" title="滚动索引（rollover index）"></a>滚动索引（rollover index）</h2><p>当现有的索引满足您提供的条件（a list of conditions）时，滚动索引API会为滚动目标（rollover target）创建一个新的索引。<br>当滚动目标是别名（alias）时，别名会指向新索引（当指向多个索引时，必须有一个索引设置<code>is_write_index=true</code>）<br>当滚动目标是数据流（data stream）时，新索引会成为数据流的写索引，并生成一个增量</p>
+<h3 id="Rollover-request"><a href="#Rollover-request" class="headerlink" title="Rollover request"></a>Rollover request</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST /&lt;rollover-target&gt;/_rollover/&lt;target-index&gt;</span><br><span class="line">POST /&lt;rollover-target&gt;/_rollover/</span><br></pre></td></tr></table></figure>
+
+<p>滚动索引接受一个滚动目标（rollover target）和一个条件列表（a list of conditions）。可以使用API撤销太大或太旧的索引。</p>
+<p>当满足滚动条件，滚动请求在不同的场景下，滚动操作有所不同：</p>
+<ul>
+<li>如果滚动目标是别名指向单个索引时：</li>
+</ul>
+<ol>
+<li>创建新索引</li>
+<li>别名指向新索引</li>
+<li>原始索引中移除别名</li>
+</ol>
+<ul>
+<li>如果滚动目标是别名指向多个索引时，必须有一个索引设置<code>is_write_index=true</code>：</li>
+</ul>
+<ol>
+<li>创建新索引</li>
+<li>设置新索引is_write_index=true</li>
+<li>设置原始索引is_write_index=false</li>
+</ol>
+<ul>
+<li>如果滚动目标是数据流：</li>
+</ul>
+<ol>
+<li>创建新索引</li>
+<li>在数据流上添加新索引作为支持索引和写索引</li>
+<li>增加数据流的generation属性</li>
+</ol>
+<h3 id="Path-parameters"><a href="#Path-parameters" class="headerlink" title="Path parameters"></a>Path parameters</h3><ul>
+<li><code>&lt;rollover-target&gt;</code>：必填，现有的分配给目标索引的索引别名或数据流名称。</li>
+<li><code>&lt;target-index&gt;</code>：可选，用于创建和分配索引别名的目标索引名称。如果<code>&lt;rollover-target&gt;</code>是数据流，则不允许使用此参数。如果<code>&lt;rollover-target&gt;</code>是索引别名，则分配给以”-“和数字结尾的索引名称，如logs-000001。</li>
+</ul>
+<h3 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">PUT /logs-000001</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;aliases&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;logs_write&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add &gt; 1000 documents to logs-000001</span></span><br><span class="line"></span><br><span class="line">POST /logs_write/_rollover</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;conditions&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;max_age&quot;</span>:   <span class="string">&quot;7d&quot;</span>,</span><br><span class="line">    <span class="string">&quot;max_docs&quot;</span>:  1000,</span><br><span class="line">    <span class="string">&quot;max_size&quot;</span>:  <span class="string">&quot;5gb&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.lights8080.com/p/cae9608.html" title="Elasticsearch-索引（Index）" target="_blank" rel="external">http://www.lights8080.com/p/cae9608.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://www.lights8080.com" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://www.lights8080.com" target="_blank"><span class="text-dark">七路灯</span><small class="ml-1x">从事互联网开发，信奉终身成长的技术人</small></a></h3>
+        <div>人的一生应当有许多停靠站，我但愿每一个站台都有一盏雾中的灯。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/p/12e2da86.html" title="Elasticsearch-搜索（Search-DSL）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/p/9e5edb25.html" title="Elasticsearch-介绍"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo, wechat" data-mobile-sites="weibo, wechat"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	<!-- Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>. -->
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '0A4Cg4vm7SmX0sfL9lfvExSq-gzGzoHsz',
+    appKey: 'jkuwap2Fh3CKBlP1SO59uyb4',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?d3fc7929daaac13ce6f82be8d6f62525";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
