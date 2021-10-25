@@ -18,17 +18,17 @@
   
   
   <title>凤凰架构-透明多层分流系统 | 七路灯</title>
-  <meta name="description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡">
+  <meta name="description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡，服务端缓存。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="凤凰架构-透明多层分流系统">
 <meta property="og:url" content="http://www.lights8080.com/p/fd2df2c4.html">
 <meta property="og:site_name" content="七路灯">
-<meta property="og:description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡">
+<meta property="og:description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡，服务端缓存。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/kCQhKS.png">
 <meta property="og:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/08/uHa47g.jpg">
 <meta property="article:published_time" content="2021-08-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-09-07T03:50:11.000Z">
+<meta property="article:modified_time" content="2021-10-21T10:20:37.000Z">
 <meta property="article:author" content="七路灯">
 <meta property="article:tag" content="凤凰架构">
 <meta name="twitter:card" content="summary">
@@ -191,7 +191,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">45</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">10</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">45</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">11</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">11</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -201,7 +201,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -211,7 +211,7 @@
   <div class="widget">
     <h3 class="widget-title">标签云</h3>
     <div class="widget-body tagcloud">
-      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.43px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.71px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.14px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.43px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.14px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.14px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.14px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.14px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.86px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.29px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.71px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13.29px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.14px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13.14px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.14px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.43px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.43px;">语录</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13px;">读书笔记</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
+      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.38px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.63px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.13px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.38px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.13px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.13px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.13px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.13px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.88px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.25px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.75px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13.25px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.13px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13.13px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.13px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.38px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.38px;">语录</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13px;">读书笔记</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
     </div>
   </div>
 
@@ -220,7 +220,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -232,6 +232,21 @@
     <div class="widget-body">
       <ul class="recent-post-list list-unstyled no-thumbnail">
         
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/ac30aed0.html" class="title">凤凰架构-架构安全性</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-10-20T16:00:00.000Z" itemprop="datePublished">2021-10-21</time>
+              </p>
+            </div>
+          </li>
+          
           <li>
             
             <div class="item-inner">
@@ -288,21 +303,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2021-09-09T16:00:00.000Z" itemprop="datePublished">2021-09-10</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a>
-              </p>
-              <p class="item-title">
-                <a href="/p/78ecf609.html" class="title">数据仓库项目实战</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-09-05T16:00:00.000Z" itemprop="datePublished">2021-09-06</time>
               </p>
             </div>
           </li>
@@ -364,10 +364,10 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/p/fd2df2c4.html#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 7.1k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 17(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 25(分)</span>
 	
 
       </div>
@@ -375,7 +375,7 @@
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <p>周志明《凤凰架构：构建可靠的大型分布式系统》<br><a target="_blank" rel="noopener" href="https://icyfenix.cn/">https://icyfenix.cn/</a></p>
-<p>包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡</p>
+<p>包括：域名解析，客户端缓存，传输链路，传输压缩，内容分发，负载均衡，服务端缓存。</p>
 <span id="more"></span>
 <p>透明多级分流系统的设计原则：</p>
 <ul>
@@ -478,7 +478,7 @@
 <li>访问控制，QoS控制，referer防盗链</li>
 <li>注入功能，Google Analytics等</li>
 </ul>
-<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>“负载均衡器”（Load Balancer）：承担了调度后方的多台机器，以统一的接口对外提供服务的技术组件。</p>
+<h2 id="负载均衡-Load-Balancing"><a href="#负载均衡-Load-Balancing" class="headerlink" title="负载均衡(Load Balancing)"></a>负载均衡(Load Balancing)</h2><p>“负载均衡器”（Load Balancer）：承担了调度后方的多台机器，以统一的接口对外提供服务的技术组件。</p>
 <p>从形式上来说都可以分为两种：四层负载均衡和七层负载均衡。四层负载均衡的优势是性能高，七层负载均衡的优势是功能强。</p>
 <table>
 <thead>
@@ -589,6 +589,48 @@
 <p>负载均衡器的实现有“软件均衡器”和“硬件均衡器”两类。</p>
 <p>软件均衡器又分为直接建设在操作系统内核的均衡器和应用程序形式的均衡器两种。前者的代表是 LVS（Linux Virtual Server），后者的代表有 Nginx、HAProxy、KeepAlived，等等；前者的性能会更好，因为它不需要在内核空间和应用空间中来回复制数据包；而后者的优势是选择广泛，使用方便，功能不受限于内核版本。</p>
 <p>硬件均衡器，往往会直接采用应用专用集成电路来实现。因为它有专用处理芯片的支持，可以避免操作系统层面的损耗，从而能够达到最高的性能。这类的代表就是著名的 F5 和 A10 公司的负载均衡产品。</p>
+<h2 id="缓存-Cache"><a href="#缓存-Cache" class="headerlink" title="缓存(Cache)"></a>缓存(Cache)</h2><p>服务端缓存是一种通用的技术组件，它主要用于减少多个客户端相同的资源请求，缓解或降低服务器的负载压力。</p>
+<p>引入缓存的理由，1）为了缓解 CPU 压力而做缓存，2）为了缓解 I/O 压力而做缓存。<br>如果你可以通过增强 CPU、I/O 本身的性能（比如扩展服务器的数量）来满足需要的话，那升级硬件往往是更好的解决方案。</p>
+<p>吞吐量（每秒操作数，Operations per Second，ops/s）：它反映了对缓存进行并发读、写操作的效率，即缓存本身的工作效率高低。<br>缓存的吞吐量只在并发场景中才有统计的意义，所以，并发读写的场景中，“尽可能避免数据竞争”是最关键的。<br>针对伴随读写操作而来的状态维护，有两种处理思路。一种是以 Guava Cache 为代表的同步处理机制，另一种是以 Caffeine 为代表的异步日志提交机制。</p>
+<p>缓存策略：</p>
+<ul>
+<li>FIFO（First In First Out）：优先淘汰最早进入被缓存的数据</li>
+<li>LRU（Least Recent Used）：优先淘汰最久未被使用访问过的数据</li>
+<li>LFU（Least Frequently Used）：优先淘汰最不经常使用的数据</li>
+<li>TinyLFU（Tiny Least Frequently Used）：TinyLFU 是 LFU 的改进版本，通过用少量的样本数据来估计全体数据的特征。用相对小得多的记录频率和空间，来近似地找出缓存中的低价值数据。</li>
+</ul>
+<p>扩展知识：</p>
+<blockquote>
+<ol>
+<li>ConcurrentHashMap（JDK8）中读操作完全没有线程安全措施，无论是CAS还是Synchronized都没有做。写操作是通过CAS来做节点位置判断，通过Synchronized来修改值。单个值级别的锁定意味着只有不同线程、修改同一个值才会有锁竞争。不同线程修改不同的值不会竞争相同的锁，或者相同线程修改同一个值锁是可重入的，简而言之“有锁”并不一定是指“有竞争”。</li>
+<li>软件开发两大难题，一个是缓存失效，该失效时未失效，不该失效时失效，另一个是命名。</li>
+<li>环形缓冲(Ring Buffer)：它是一种拥有读、写两个指针的数据复用结构。</li>
+</ol>
+</blockquote>
+<h3 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h3><p>缓存可以分为“进程内缓存”和“分布式缓存”两大类。</p>
+<p>进程内缓存：只为节点本身提供服务，无网络访问操作，速度快但缓存的数据不能在各个服务节点中共享。<br>分布式缓存：与进程内缓存相反，处理与网络有关的操作是影响吞吐量的主要因素。分为复制式缓存与集中式缓存。</p>
+<p>复制式缓存，可以看作是“能够支持分布式的进程内缓存”，工作原理与 Session 复制类似，代表是JBossCache。缺点是复制性能会随着节点的增加呈现平方级下降，基本上已经很难再见到使用这种缓存形式的大型信息系统了。<br>集中式缓存，是目前分布式缓存的主流形式，代表是Redis。缺点是缓存的读、写都需要网络访问，不可能再达到进程内缓存那样的高性能。好处是不会随着集群节点数量的增加而产生额外的负担.</p>
+<p>分布式缓存集群是否能保证数据一致性，也可以将它分为 AP 和 CP 两种类型，通常不太会使用缓存来处理追求强一致性的数据。<br>Redis 集群就是典型的 AP 式，它具有高性能、高可用等特点，但它却并不保证强一致性。而能够保证强一致性的 ZooKeeper、Doozerd、Etcd 等分布式协调框架，通常不会把它们当作“缓存框架”来使用。倒是常跟 Redis 和其他分布式缓存搭配工作，用来实现其中的通知、协调、队列、分布式锁等功能。</p>
+<p>分布式缓存与进程内缓存各有所长，它们是互补的，而不是竞争的关系。所以，完全可以同时互相搭配，来构成透明多级缓存（Transparent Multilevel Cache，TMC）。</p>
+<p>多级缓存的意思是，使用进程内缓存做一级缓存，分布式缓存做二级缓存。但代码侵入性较大，不便于管理，数据更新更是麻烦，很容易出现一二级缓存里的数据不一致。<br>如何“透明”地解决这些问题，多级缓存才具有实用的价值。<br>一种常见的设计原则，就是变更以分布式缓存中的数据为准，访问以进程内缓存的数据优先。大致做法是当数据发生变动时，在集群内发送推送通知（引入ZooKeeper 或 Etcd 来处理），让各个节点的一级缓存自动失效掉相应数据。</p>
+<h3 id="缓存风险"><a href="#缓存风险" class="headerlink" title="缓存风险"></a>缓存风险</h3><h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><p>查询的数据在数据库中根本不存在的话，请求的流量每次都不会命中，每次都会触及到末端的数据库。这种查询不存在数据的现象，就被称为缓存穿透。</p>
+<p>解决办法：<br>1）对于业务逻辑本身就不能避免的缓存穿透，约定一定时间内，返回空的Key依然进行缓存。<br>2）对于恶意攻击导致的缓存穿透，设置布隆过滤器，用最小的代价，判断某个元素是否存在。</p>
+<h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><p>缓存中的某些热点数据忽然因为某种原因失效了，都到达真实数据源中去，导致其压力剧增。这种现象，就被称为缓存击穿。</p>
+<p>解决办法：<br>1）加锁同步，以请求该数据的 Key 值为锁，其他线程采取阻塞或重试策略。<br>2）热点数据由代码来手动管理</p>
+<h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><p>由于大批不同的数据在短时间内一起失效，导致了这些数据的请求都击穿了缓存，到达数据源。这种现象，就被称为缓存雪崩。</p>
+<p>解决办法：<br>1）提升缓存系统可用性，建设分布式缓存的集群。<br>2）分散了它们的过期时间<br>3）将缓存的生存期从固定时间改为一个时间段内的随机时间</p>
+<h4 id="缓存污染"><a href="#缓存污染" class="headerlink" title="缓存污染"></a>缓存污染</h4><p>缓存中的数据与真实数据源中的数据不一致的现象。</p>
+<p>为了尽可能地提高使用缓存时的一致性，人们已经总结了不少更新缓存时可以遵循的设计模式，比如 Cache Aside、Read/Write Through、Write Behind Caching，等等。</p>
+<h5 id="Cache-Aside："><a href="#Cache-Aside：" class="headerlink" title="Cache Aside："></a>Cache Aside：</h5><ul>
+<li>读数据时，先读缓存，缓存没有的话，再读数据源，然后将数据放入缓存，再响应请求。</li>
+<li>写数据时，先写数据源，然后失效（而不是更新）掉缓存。</li>
+</ul>
+<p>Cache Aside 模式依然也不能保证在一致性上绝对不出问题，采用 Cache Aside 模式典型的出错场景，就是如果某个数据是从未被缓存过的，请求会直接流到真实数据源中，如果数据源中的写操作发生在查询请求之后，结果回填到缓存之前，也会出现缓存中回填的内容与数据库的实际数据不一致的情况。<br>但是，出现这种情况的概率实际上是很低的，Cache Aside 模式仍然是以低成本更新缓存，并且获得相对可靠结果的解决方案。</p>
+<h5 id="Read-Write-Through"><a href="#Read-Write-Through" class="headerlink" title="Read/Write Through"></a>Read/Write Through</h5><ul>
+<li>Read Through，读数据时，先读缓存，缓存没有的话，由缓存组件负责读数据源将数据放入缓存，再响应请求。</li>
+<li>Write Through，写数据时，先写入缓存，由缓存组件负责同步更新到数据源中。</li>
+</ul>
+<h5 id="Write-Behind-Caching"><a href="#Write-Behind-Caching" class="headerlink" title="Write Behind Caching"></a>Write Behind Caching</h5><p>Write back是相较于Write Through而言的一种异步回写策略，由缓存组件负责异步更新到数据源中。适用于读少写多的场景。</p>
 
       
     </div>

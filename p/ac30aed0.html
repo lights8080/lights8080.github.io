@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>凤凰架构-架构安全性 | 七路灯</title>
+  <meta name="description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：认证、授权、凭证、保密、传输、验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凤凰架构-架构安全性">
+<meta property="og:url" content="http://www.lights8080.com/p/ac30aed0.html">
+<meta property="og:site_name" content="七路灯">
+<meta property="og:description" content="周志明《凤凰架构：构建可靠的大型分布式系统》https:&#x2F;&#x2F;icyfenix.cn&#x2F; 包括：认证、授权、凭证、保密、传输、验证">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/10/NCzNMZ.png">
+<meta property="article:published_time" content="2021-10-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-22T11:44:34.000Z">
+<meta property="article:author" content="七路灯">
+<meta property="article:tag" content="凤凰架构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/10/NCzNMZ.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.lights8080.com/p/ac30aed0.html">
+  
+    <link rel="alternate" href="/atom.xml" title="七路灯" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://www.lights8080.com" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">七路灯</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">从事互联网开发，信奉终身成长的技术人</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎关注公众号共同交流学习!</p>
+            </div>
+            <div class="content">
+                <img src="/../images/gongzhonghao-qrcode.jpg" alt="site.qrcode_alt" title="site.qrcode_title" />
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/weekly/">weekly</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">45</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%99%AE/">科普</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">11</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">11</span></li></ul></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElastAlert/" rel="tag">ElastAlert</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Filebeat/" rel="tag">Filebeat</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logstash/" rel="tag">Logstash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJs/" rel="tag">NodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RPC/" rel="tag">RPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/" rel="tag">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/for-Mac/" rel="tag">for Mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weekly/" rel="tag">weekly</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag">中台</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" rel="tag">人体系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" rel="tag">字符集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" rel="tag">开源产品</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" rel="tag">数据仓库</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" rel="tag">李永乐老师</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" rel="tag">线上问题</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag">编程思想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" rel="tag">美国个人支票</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E5%BD%95/" rel="tag">语录</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag">阿里云</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ELK/" style="font-size: 14px;">ELK</a> <a href="/tags/ElastAlert/" style="font-size: 13.38px;">ElastAlert</a> <a href="/tags/Elasticsearch/" style="font-size: 13.63px;">Elasticsearch</a> <a href="/tags/Filebeat/" style="font-size: 13.13px;">Filebeat</a> <a href="/tags/Git/" style="font-size: 13px;">Git</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/IDEA/" style="font-size: 13px;">IDEA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Java/" style="font-size: 13.38px;">Java</a> <a href="/tags/Kibana/" style="font-size: 13px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Logstash/" style="font-size: 13.13px;">Logstash</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/Mysql/" style="font-size: 13px;">Mysql</a> <a href="/tags/Nginx/" style="font-size: 13px;">Nginx</a> <a href="/tags/NodeJs/" style="font-size: 13px;">NodeJs</a> <a href="/tags/Python/" style="font-size: 13px;">Python</a> <a href="/tags/RPC/" style="font-size: 13px;">RPC</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/SpringCloud/" style="font-size: 13.13px;">SpringCloud</a> <a href="/tags/for-Mac/" style="font-size: 13.13px;">for Mac</a> <a href="/tags/shell/" style="font-size: 13.13px;">shell</a> <a href="/tags/weekly/" style="font-size: 13.88px;">weekly</a> <a href="/tags/%E4%B8%AD%E5%8F%B0/" style="font-size: 13px;">中台</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.25px;">事务</a> <a href="/tags/%E4%BA%BA%E4%BD%93%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">人体系统</a> <a href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" style="font-size: 13.75px;">凤凰架构</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13px;">前端</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 13.25px;">大数据</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E9%9B%86/" style="font-size: 13px;">字符集</a> <a href="/tags/%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81/" style="font-size: 13.13px;">开源产品</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 13px;">微服务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 13.13px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13.13px;">杂谈</a> <a href="/tags/%E6%9D%8E%E6%B0%B8%E4%B9%90%E8%80%81%E5%B8%88/" style="font-size: 13px;">李永乐老师</a> <a href="/tags/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98/" style="font-size: 13.38px;">线上问题</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 13px;">线程池</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" style="font-size: 13px;">编程思想</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13px;">网络</a> <a href="/tags/%E7%BE%8E%E5%9B%BD%E4%B8%AA%E4%BA%BA%E6%94%AF%E7%A5%A8/" style="font-size: 13px;">美国个人支票</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13px;">脚本</a> <a href="/tags/%E8%AF%AD%E5%BD%95/" style="font-size: 13.38px;">语录</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13px;">读书笔记</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 13px;">阿里云</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/ac30aed0.html" class="title">凤凰架构-架构安全性</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-10-20T16:00:00.000Z" itemprop="datePublished">2021-10-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/57bfb88c.html" class="title">2109-4-不要为了运动而运动</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-23T16:00:00.000Z" itemprop="datePublished">2021-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/f2ce654.html" class="title">大数据框架汇总</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-17T16:00:00.000Z" itemprop="datePublished">2021-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/1db6c142.html" class="title">2109-3-小情境与大情境</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-15T16:00:00.000Z" itemprop="datePublished">2021-09-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/weekly/">weekly</a>
+              </p>
+              <p class="item-title">
+                <a href="/p/9dc87d4e.html" class="title">2109-2-马猴来了</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-09T16:00:00.000Z" itemprop="datePublished">2021-09-10</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-读书笔记/凤凰架构/凤凰架构-架构安全性" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      凤凰架构-架构安全性
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/p/ac30aed0.html" class="article-date">
+	  <time datetime="2021-10-20T16:00:00.000Z" itemprop="datePublished">2021-10-21</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>►<a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="tag">凤凰架构</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/p/ac30aed0.html" class="leancloud_visitors"  data-flag-title="凤凰架构-架构安全性">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/p/ac30aed0.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>周志明《凤凰架构：构建可靠的大型分布式系统》<br><a target="_blank" rel="noopener" href="https://icyfenix.cn/">https://icyfenix.cn/</a></p>
+<p>包括：认证、授权、凭证、保密、传输、验证</p>
+<span id="more"></span>
+
+<p>系统安全，不仅包括“防御系统被黑客攻击”这样狭隘的安全，还包括一些与管理、运维、审计等领域主导的相关安全性问题，比如说安全备份与恢复、安全审计、防治病毒，等等。</p>
+<p>软件架构安全，主要包括（但不限于）以下这些问题的具体解决方案：认证、授权、凭证、保密、传输、验证。</p>
+<p>这些问题基本上也都是与具体系统、具体业务无关的通用性问题，这就意味着它们往往会存在一些业界通行的、已经被验证过是行之有效的解决方案，乃至已经形成了行业标准，不需要我们再从头去构思如何解决。</p>
+<h2 id="认证（Authentication）"><a href="#认证（Authentication）" class="headerlink" title="认证（Authentication）"></a>认证（Authentication）</h2><blockquote>
+<p>系统如何正确分辨出操作用户的真实身份？</p>
+</blockquote>
+<p>认证（Authentication）、授权（Authorization）和凭证（Credentials）这三项可以说是一个系统中最基础的安全设计了。<br>信息系统在为用户提供服务之前，总是希望先弄清楚“你是谁？”（认证）、“你能干什么？”（授权）以及“你如何证明？”（凭证）这三个基本问题的答案。</p>
+<p>架构安全性的经验原则：以标准规范为指导、以标准接口去实现，严格遵循标准就是最恰当的安全设计。</p>
+<h4 id="基于通讯协议：HTTP-认证"><a href="#基于通讯协议：HTTP-认证" class="headerlink" title="基于通讯协议：HTTP 认证"></a>基于通讯协议：HTTP 认证</h4><p>IETF 在RFC 7235中定义了 HTTP 协议的通用认证框架，要求所有支持 HTTP 协议的服务器，当未授权的用户意图访问服务端保护区域的资源时，应返回 401 Unauthorized 的状态码，同时要在响应报文头里，附带以下两个分别代表网页认证和代理认证的 Header 之一，告知客户端应该采取哪种方式，产生能代表访问者身份的凭证信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WWW-Authenticate: &lt;认证方案&gt; realm=&lt;保护区域的描述信息&gt;</span><br><span class="line">Proxy-Authenticate: &lt;认证方案&gt; realm=&lt;保护区域的描述信息&gt;</span><br></pre></td></tr></table></figure>
+<p>客户端必须遵循服务端指定的认证方案，在请求资源的报文头中加入身份凭证信息，服务端核实通过后才会允许该请求正常返回，否则将返回 403 Forbidden。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Authorization: &lt;认证方案&gt; &lt;凭证内容&gt;</span><br><span class="line">Proxy-Authorization: &lt;认证方案&gt; &lt;凭证内容&gt;</span><br></pre></td></tr></table></figure>
+
+<p><em>HTTP 认证框架提出的认证方案，是希望能把认证“要产生身份凭证”的目的，与“具体如何产生凭证”的实现给分开来。</em></p>
+<p>认证方案：</p>
+<ul>
+<li>Basic：是一种以演示为目的的认证方案，Basic 认证产生用户身份凭证的方法是让用户输入用户名和密码，经过 Base64 编码“加密”后作为身份凭证。</li>
+<li>Digest：HTTP 摘要认证，可以把它看作是 Basic 认证的改良版本，针对 Base64 明文发送的风险，Digest 认证把用户名和密码加盐后，再通过 MD5/SHA 等哈希算法取摘要发送出去。</li>
+<li>Bearer：基于 OAuth 2.0 规范来完成认证，OAuth 2.0 是一个同时涉及到认证与授权的协议。</li>
+<li>HOBA：一种基于自签名证书的认证方案。</li>
+<li>其他：很多厂商也扩展了自己的认证方案，如AWS4-HMAC-SHA256、Twitter Basic等。</li>
+</ul>
+<h4 id="基于通讯内容：Web-认证"><a href="#基于通讯内容：Web-认证" class="headerlink" title="基于通讯内容：Web 认证"></a>基于通讯内容：Web 认证</h4><p>但目前的信息系统，直接采用 HTTP 认证框架的比例其实是非常低的。以 HTTP 协议为基础的认证框架，也只能面向传输协议而不是具体传输内容来设计。</p>
+<p>如果用户访问信息系统中的具体服务，身份认证肯定希望是由系统本身的功能去完成的，而不是由 HTTP 服务器来负责认证。</p>
+<p>这种依靠内容而不是传输协议来实现的认证方式，被称为“Web 认证”，由于在实现形式上，登录表单占了绝对的主流，因此它通常也被称为“表单认证”。</p>
+<p><em>表单认证与 HTTP 认证不见得是完全对立的，它们分别有不同的关注点，可以结合使用。</em></p>
+<h4 id="WebAuthn"><a href="#WebAuthn" class="headerlink" title="WebAuthn"></a>WebAuthn</h4><p>万维网联盟批准了由FIDO（Fast IDentity Online，一个安全、开放、防钓鱼、无密码认证标准的联盟）领导起草的世界首份 Web 内容认证的标准“WebAuthn”。</p>
+<p>Web 表单长什么样，没有什么行业标准可循，允许做的五花八门，用户名密码、扫码、图形验证码等，都可以自行决定认证的全套交互细节。这些登录表单提交之前进行必要的表单校验，确实不太可能定义在规范上。<br>所以，WebAuthn 彻底抛弃了传统的密码登录方式，改为直接采用生物识别（指纹、人脸、虹膜、声纹）或者实体密钥（以 USB、蓝牙、NFC 连接的物理密钥容器）来作为身份凭证。</p>
+<h2 id="授权（-Authorization）"><a href="#授权（-Authorization）" class="headerlink" title="授权（ Authorization）"></a>授权（ Authorization）</h2><blockquote>
+<p>系统如何控制一个用户该看到哪些数据、能操作哪些功能？</p>
+</blockquote>
+<p>授权涉及到两个相对独立的问题<br>1）确保授权的过程可靠，主要有OAuth 2.0 和 SAML 2.0<br>2）确保授权的结果可控，对资源的访问控制模型，主要有RBAC、ABAC</p>
+<h3 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h3><p>OAuth 2.0 解决的是第三方服务中涉及的安全授权问题，是面向于解决第三方应用（Third-Party Application）的认证授权协议。</p>
+<p>可参考阮一峰老师讲解：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html</a></p>
+<p>OAuth 2.0 提出了四种不同的授权方式，包括授权码模式、简化模式、密码模式、客户端模式。</p>
+<h4 id="授权码模式（Authorization-Code）"><a href="#授权码模式（Authorization-Code）" class="headerlink" title="授权码模式（Authorization Code）"></a>授权码模式（Authorization Code）</h4><p>授权码模式是四种模式中最严谨的，第三方应用必须有应用服务器，要求服务器地址必须与注册时提供的地址一致。<br>先发放授权码，然后第三方服务器使用授权码获取令牌，避免令牌在传输转向过程中被泄漏的风险。 </p>
+<p><img src="https://gitee.com/lights8080/lights8080-oss/raw/master/2021/10/NCzNMZ.png" alt="授权码模式，简易流程图"></p>
+<h4 id="简化模式（Implicit）"><a href="#简化模式（Implicit）" class="headerlink" title="简化模式（Implicit）"></a>简化模式（Implicit）</h4><p>隐式授权省略掉了通过授权码换取令牌的步骤，整个授权过程都不需要服务端的支持。授权服务器不会再去验证第三方应用的身份，因为已经没有应用服务器了。</p>
+<p>特别强调了令牌必须是“通过 Fragment 带回”的，Fragment 是不会跟随请求被发送到服务端的，只能在客户端通过 Script 脚本来读取。<br>尽最大努力地避免了令牌从操作代理到第三方服务之间的链路，存在被攻击而泄露出去的可能性。</p>
+<h4 id="密码模式（Resource-Owner-Password-Credentials）"><a href="#密码模式（Resource-Owner-Password-Credentials）" class="headerlink" title="密码模式（Resource Owner Password Credentials）"></a>密码模式（Resource Owner Password Credentials）</h4><p>密码模式里，认证和授权就被整合成了同一个过程。仅限于在用户对第三方应用是高度可信任的场景中使用，因为用户需要把密码明文提供给第三方应用，第三方以此向授权服务器获取令牌。</p>
+<h4 id="客户端模式（Client-Credentials）"><a href="#客户端模式（Client-Credentials）" class="headerlink" title="客户端模式（Client Credentials）"></a>客户端模式（Client Credentials）</h4><p>在微服务架构中，其实并不提倡同一个系统的各服务间有默认的信任关系，所以服务之间的调用也需要先进行认证授权，然后才能通讯。客户端模式便是一种常用的服务间认证授权的解决方案。</p>
+<h3 id="RBAC（基于角色的访问控制，Role-Based-Access-Control）。"><a href="#RBAC（基于角色的访问控制，Role-Based-Access-Control）。" class="headerlink" title="RBAC（基于角色的访问控制，Role-Based Access Control）。"></a>RBAC（基于角色的访问控制，Role-Based Access Control）。</h3><p>所有的访问控制模型，实质上都是在解决同一个问题：谁（User）拥有什么权限（Authority）去操作（Operation）哪些资源（Resource）。</p>
+<p>为避免对每一个用户设定权限，RBAC 提出了角色和许可等概念，角色为的是解耦用户与权限之间的多对多关系，而许可为的是解耦操作与资源之间的多对多关系。<br>RBAC-1 模型的角色权限继承关系，RBAC-2 模型的角色职责分离关系。</p>
+<p>建立访问控制模型的基本目的就是为了管理垂直权限和水平权限。垂直权限即功能权限，水平权限则是数据权限，它很难抽象与通用。</p>
+<h2 id="凭证（Credentials）"><a href="#凭证（Credentials）" class="headerlink" title="凭证（Credentials）"></a>凭证（Credentials）</h2><blockquote>
+<p>系统如何保证它与用户之间的承诺是双方当时真实意图的体现，是准确、完整且不可抵赖的？</p>
+</blockquote>
+<h2 id="保密（Confidentiality）"><a href="#保密（Confidentiality）" class="headerlink" title="保密（Confidentiality）"></a>保密（Confidentiality）</h2><blockquote>
+<p>系统如何保证敏感数据无法被包括系统管理员在内的内外部人员所窃取、滥用？</p>
+</blockquote>
+<h2 id="传输（Transport-Security）"><a href="#传输（Transport-Security）" class="headerlink" title="传输（Transport Security）"></a>传输（Transport Security）</h2><blockquote>
+<p>系统如何保证通过网络传输的信息无法被第三方窃听、篡改和冒充？</p>
+</blockquote>
+<h2 id="验证（Verification）"><a href="#验证（Verification）" class="headerlink" title="验证（Verification）"></a>验证（Verification）</h2><blockquote>
+<p>系统如何确保提交到每项服务中的数据是合乎规则的，不会对系统稳定性、数据一致性、正确性产生风险？</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.lights8080.com/p/ac30aed0.html" title="凤凰架构-架构安全性" target="_blank" rel="external">http://www.lights8080.com/p/ac30aed0.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://www.lights8080.com" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://www.lights8080.com" target="_blank"><span class="text-dark">七路灯</span><small class="ml-1x">从事互联网开发，信奉终身成长的技术人</small></a></h3>
+        <div>人的一生应当有许多停靠站，我但愿每一个站台都有一盏雾中的灯。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/p/57bfb88c.html" title="2109-4-不要为了运动而运动"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo, wechat" data-mobile-sites="weibo, wechat"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/lights8080" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/lights8080" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	<!-- Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>. -->
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '0A4Cg4vm7SmX0sfL9lfvExSq-gzGzoHsz',
+    appKey: 'jkuwap2Fh3CKBlP1SO59uyb4',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?d3fc7929daaac13ce6f82be8d6f62525";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
